@@ -40,8 +40,8 @@ class Mano:
         valor = sum(carta.obtener_valor() for carta in self.cartas)
         numero_ases = sum(1 for carta in self.cartas if carta.valor == 'A')
 
-        # Usar puertas lógicas para ajustar el valor del As si el total es mayor que 21
-        while (valor > 21) and (numero_ases > 0):
+        # Ajustar valor del As si el total es mayor que 21
+        while valor > 21 and numero_ases:
             valor -= 10
             numero_ases -= 1
 
@@ -50,21 +50,34 @@ class Mano:
     def __str__(self):
         return ", ".join(str(carta) for carta in self.cartas)
 
+# Clase Dealer
+class Dealer:
+    def __init__(self):
+        self.mano = Mano()
+
+    def jugar(self, baraja):
+        # El dealer sigue jugando hasta que tenga al menos 17 puntos
+        while self.mano.obtener_valor() < 17:
+            self.mano.agregar_carta(baraja.repartir_carta())
+
+        print("Cartas del dealer: ", self.mano)
+        return self.mano.obtener_valor()
+
 # Función principal para jugar Blackjack
 def jugar_blackjack():
     baraja = Baraja()
 
     mano_jugador = Mano()
-    mano_croupier = Mano()
+    dealer = Dealer()
 
-    # Repartir dos cartas iniciales al jugador y al croupier
+    # Repartir dos cartas iniciales al jugador y al dealer
     mano_jugador.agregar_carta(baraja.repartir_carta())
     mano_jugador.agregar_carta(baraja.repartir_carta())
-    mano_croupier.agregar_carta(baraja.repartir_carta())
-    mano_croupier.agregar_carta(baraja.repartir_carta())
+    dealer.mano.agregar_carta(baraja.repartir_carta())
+    dealer.mano.agregar_carta(baraja.repartir_carta())
 
     print("Tus cartas: ", mano_jugador)
-    print("Cartas del croupier: ", mano_croupier.cartas[0])
+    print("Carta visible del dealer: ", dealer.mano.cartas[0])
 
     # Turno del jugador
     while True:
@@ -73,32 +86,27 @@ def jugar_blackjack():
             mano_jugador.agregar_carta(baraja.repartir_carta())
             print("Tus cartas: ", mano_jugador)
 
-            # Verificación con puertas lógicas
             if mano_jugador.obtener_valor() > 21:
                 print("¡Te pasaste de 21! Has perdido.")
                 return
         else:
             break
 
-    # Turno del croupier
-    while mano_croupier.obtener_valor() < 17:
-        mano_croupier.agregar_carta(baraja.repartir_carta())
-
-    print("Cartas del croupier: ", mano_croupier)
+    # Turno del dealer
+    valor_dealer = dealer.jugar(baraja)
 
     valor_jugador = mano_jugador.obtener_valor()
-    valor_croupier = mano_croupier.obtener_valor()
 
     # Determinar el resultado del juego usando puertas lógicas
-    gana_jugador = (valor_jugador <= 21) and ((valor_croupier > 21) or (valor_jugador > valor_croupier))
-    empate = (valor_jugador == valor_croupier) and (valor_jugador <= 21)
+    gana_jugador = (valor_jugador <= 21) and ((valor_dealer > 21) or (valor_jugador > valor_dealer))
+    empate = (valor_jugador == valor_dealer) and (valor_jugador <= 21)
 
     if gana_jugador:
         print("¡Has ganado!")
     elif empate:
         print("Es un empate.")
     else:
-        print("El croupier gana.")
+        print("El dealer gana.")
 
 # Llamada a la función para jugar
 jugar_blackjack()
