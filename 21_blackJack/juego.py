@@ -40,8 +40,8 @@ class Mano:
         valor = sum(carta.obtener_valor() for carta in self.cartas)
         numero_ases = sum(1 for carta in self.cartas if carta.valor == 'A')
 
-        # Ajustar valor del As si el total es mayor que 21
-        while valor > 21 and numero_ases:
+        # Usar puertas lógicas para ajustar el valor del As si el total es mayor que 21
+        while (valor > 21) and (numero_ases > 0):
             valor -= 10
             numero_ases -= 1
 
@@ -73,6 +73,7 @@ def jugar_blackjack():
             mano_jugador.agregar_carta(baraja.repartir_carta())
             print("Tus cartas: ", mano_jugador)
 
+            # Verificación con puertas lógicas
             if mano_jugador.obtener_valor() > 21:
                 print("¡Te pasaste de 21! Has perdido.")
                 return
@@ -88,10 +89,13 @@ def jugar_blackjack():
     valor_jugador = mano_jugador.obtener_valor()
     valor_croupier = mano_croupier.obtener_valor()
 
-    # Determinar el resultado del juego
-    if valor_croupier > 21 or valor_jugador > valor_croupier:
+    # Determinar el resultado del juego usando puertas lógicas
+    gana_jugador = (valor_jugador <= 21) and ((valor_croupier > 21) or (valor_jugador > valor_croupier))
+    empate = (valor_jugador == valor_croupier) and (valor_jugador <= 21)
+
+    if gana_jugador:
         print("¡Has ganado!")
-    elif valor_jugador == valor_croupier:
+    elif empate:
         print("Es un empate.")
     else:
         print("El croupier gana.")
