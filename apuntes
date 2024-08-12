@@ -8,3 +8,9 @@ estado? lapsos de lo que ocurre con la informacion mientras corre el programa , 
 postincremento
 emulador de assembler incremento de una variable 
 no nos preocupamos por el como
+def Max(list):
+ if len (list)==1:
+    return list[0]
+ else
+   m= Max(list[:1])
+   return m if m >list[0] else list[0]
