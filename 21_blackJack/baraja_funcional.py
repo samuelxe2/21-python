@@ -6,8 +6,8 @@ def baraja_singleton():
         palos = ['Corazones', 'Diamantes', 'Tréboles', 'Picas']
         cartas = [(valor, palo) for valor in valores for palo in palos]
         random.shuffle(cartas)
-        baraja_singleton._instance = tuple(cartas)  # Inmutable
-    return list(baraja_singleton._instance)  # Devuelve una copia de la baraja
+        baraja_singleton._instance = cartas
+    return baraja_singleton._instance[:]
 
 def repartir_carta(baraja):
     return baraja.pop(), baraja
