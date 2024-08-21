@@ -1,0 +1,5 @@
+desplaza el divisor a la izquierda (multiplicando por 2) hasta que sea mayor o igual al dividendo. El cociente se calcula restando el divisor desplazado del dividendo y desplazando nuevamente hasta obtener el resultado final.
+
+4. **Ajuste de Signo**:
+   Finalmente, se ajusta el signo del resultado dependiendo de los signos del dividendo y el divisor originales.
+
