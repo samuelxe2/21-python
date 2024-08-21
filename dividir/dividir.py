@@ -1,33 +1,39 @@
-def dividir(dividendo, divisor):
-    if divisor == 0:
-        raise ValueError("El divisor no puede ser cero.")
-    
-    if dividendo == -2**31 and divisor == -1:
-        return 2**31 - 1
-    
-    dividendo_abs = abs(dividendo)
-    divisor_abs = abs(divisor)
-    
-    cociente = 0
-    bit = 1
-    
-    while (divisor_abs << 1) <= dividendo_abs:
-        divisor_abs <<= 1
-        bit <<= 1
-    
-    while bit > 0:
-        if dividendo_abs >= divisor_abs:
-            dividendo_abs -= divisor_abs
-            cociente |= bit
-        
-        divisor_abs >>= 1
-        bit >>= 1
-    
-    return -cociente if (dividendo < 0) != (divisor < 0) else cociente
+print('Ingrese dos números enteros positivos y calcularé la división con decimales usando operaciones de desplazamiento de bits.')
+a = int(input('Número a: '))
+b = int(input('Número b: '))
 
-# Ejemplo de uso con input
-dividendo = int(input("Ingrese el dividendo: "))
-divisor = int(input("Ingrese el divisor: "))
+cociente = 0
+temp = 1
+decimales = 0
+# Cantidad de decimales deseada
+precision = 10  
 
-print("Resultado:", dividir(dividendo, divisor))
+
+if b == 0:
+    print("División por cero no está definida.")
+else:
+    # Mueve los bits de `b` hacia la izquierda hasta que sea mayor que `a`
+    while b <= a:
+        b <<= 1
+        temp <<= 1
+
+    # Ahora resta usando desplazamientos de bits
+    while temp > 1:
+        b >>= 1
+        temp >>= 1
+        if a >= b:
+            a -= b
+            cociente += temp
+
+    # Calcular la parte decimal
+    for _ in range(precision):
+        a *= 10
+        decimal_digit = 0
+        while a >= b:
+            a -= b
+            decimal_digit += 1
+        decimales = decimales * 10 + decimal_digit
+
+    print(f'El cociente de la división es {cociente}.{decimales}')
+
 
